@@ -9,8 +9,13 @@
 include "Crawler.php";
 
 $crawler = new Crawler();
+$crawler_data = [];
+if($crawler->loginAndSaveCookie()){
+    $crawler_data = $crawler->getScrapData();
+}
+
 $total_count_by_date = array_count_values($crawler->getDataArray());
-$crawler_data = $crawler->getCrawlerData();
+
 ?>
 <?php $tmp_breakpoint_count = 0; ?>
 <?php foreach ((array)$total_count_by_date as $key_tcbd => $value_tcbd): ?>

@@ -3,42 +3,37 @@
  */
 "use strict";
 var Scraper = function () {
-    var initUpdateBtn = function () {
-        $("#btn-update").on('click', function (e) {
+    var handleClickScrapData = function () {
 
-            // reset fetch data container
+        $("#btn-update").on('click', function (e) {
+            // reset fetch data container every time click scrap
             $("#fetch-data").html('');
 
-            // open block UI
+            // open block UI before ajax call
             $.blockUI({
-                css: {
-                    border: 'none',
-                    padding: '10px',
-                    backgroundColor: '#000',
-                    '-webkit-border-radius': '10px',
-                    '-moz-border-radius': '10px',
-                    opacity: .5,
-                    color: '#fff'
-                }
+                message: '<h1  class="text-center ">Just a moment...</h1>',
+                css: { backgroundColor: '#5bc0de', borderColor: '#5bc0de', color: '#fff'}
             });
 
-            var fetchingData = $.ajax("data.php");
-            // handle call back
-            fetchingData.done(function (res) {
-                $.unblockUI();
-                $("#fetch-data").html(res);
-            });
-            fetchingData.fail(function() {
-                $.unblockUI();
-                $("#fetch-data").html('');
-                alert("Error!!!");
-            });
+            // ajax fetching data
+            $.ajax({
+                    url: 'data.php'
+                }).done(function (response) {
+                    // unblock UI
+                    $.unblockUI();
+                    $("#fetch-data").html(response);
+                }).fail(function() {
+                    // unblock UI
+                    $.unblockUI();
+                    $("#fetch-data").html('');
+                    alert("Opps, Some thing went wrong!");
+                });
         });
     };
 
     return {
         init: function () {
-            initUpdateBtn();
+            handleClickScrapData();
         }
     }
 }();
